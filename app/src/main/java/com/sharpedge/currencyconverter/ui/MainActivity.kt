@@ -29,6 +29,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sharpedge.currencyconverter.ui.screen.CurrencyConversionScreen
 import com.sharpedge.currencyconverter.ui.theme.CurrencyConverterTheme
+import com.sharpedge.currencyconverter.ui.utils.ROUTE_HISTORY
+import com.sharpedge.currencyconverter.ui.utils.ROUTE_HOME
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,8 +66,8 @@ class MainActivity : ComponentActivity() {
             ), title = {
                 Text(
                     text = when (currentRoute) {
-                        "home" -> "Currency Converter Home"
-                        "detail" -> "History"
+                        ROUTE_HOME -> "Currency Converter Home"
+                        ROUTE_HISTORY -> "History"
                         else -> "Currency Converter Home"
                     }
                 )
@@ -84,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
             )
         }) { innerPadding ->
-//        AppNavigation(Modifier.padding(innerPadding), navController)
+
             AppNavigation(Modifier.padding(innerPadding), navController)
         }
     }
@@ -96,10 +98,10 @@ class MainActivity : ComponentActivity() {
         NavHost(
             modifier = modifier,
             navController = navController,
-            startDestination = "home"
+            startDestination = ROUTE_HOME
         ) {
-            composable("home") { CurrencyConversionScreen {
-                navController.navigate("detail")
+            composable(ROUTE_HOME) { CurrencyConversionScreen {
+                navController.navigate(ROUTE_HISTORY)
             } }
             // History screen here
         }
