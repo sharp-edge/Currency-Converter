@@ -39,4 +39,4 @@ If you would like to support this project for better version, give this my other
 
 Thanks
 
-Regards ~ Muhammad Hamza Khan
+Regards ~ Sarmad Thebo
