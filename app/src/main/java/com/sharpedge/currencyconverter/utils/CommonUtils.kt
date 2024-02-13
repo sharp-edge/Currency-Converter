@@ -7,3 +7,6 @@ fun formatDate(timestamp: Long): String {
     val formatter = SimpleDateFormat("HH:mm      dd-MM-yyyy", Locale.getDefault())
     return formatter.format(timestamp)
 }
+
+fun String.isDigitsOnly(): Boolean = this.all { it.isDigit() }
+

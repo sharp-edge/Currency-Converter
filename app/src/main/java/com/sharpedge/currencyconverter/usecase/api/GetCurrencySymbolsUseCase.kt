@@ -1,6 +1,5 @@
 package com.sharpedge.currencyconverter.usecase.api
 
-import android.util.Log
 import com.sharpedge.currencyconverter.mapper.mapToUIModel
 import com.sharpedge.currencyconverter.network.api.error.ApiException
 import com.sharpedge.currencyconverter.repository.CurrencyRepository

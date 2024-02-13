@@ -1,6 +1,6 @@
 package com.sharpedge.currencyconverter.viewmodel
 
-import android.util.Log
+
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +18,7 @@ import com.sharpedge.currencyconverter.usecase.api.IGetCurrencySymbolsUseCase
 import com.sharpedge.currencyconverter.usecase.database.ISaveRecordUseCase
 import java.util.Date
 import com.sharpedge.currencyconverter.utils.Result
+import com.sharpedge.currencyconverter.utils.isDigitsOnly
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -38,8 +39,8 @@ class CurrencyConversionViewModel @Inject constructor(
 
     }
 
-    private fun fetchCurrencySymbols() = viewModelScope.launch {
-        Log.d("Sarmad", "fetchCurrencySymbols() is called")
+    fun fetchCurrencySymbols() = viewModelScope.launch {
+
         _viewState.value = _viewState.value.copy(isLoading = true)
         val result = getCurrencySymbolsUseCase.fetchCurrencySymbols()
         _viewState.value = when (result) {
@@ -54,6 +55,16 @@ class CurrencyConversionViewModel @Inject constructor(
                 isLoading = false,
                 error = result.errorType
             )
+
+            else -> {
+                _viewState.value.copy(
+                    isLoading = false,
+                    fromCurrency = null,
+                    toCurrency = null,
+                    error = ErrorType.UnknownError
+                )
+            }
+
         }
     }
 
@@ -76,6 +87,13 @@ class CurrencyConversionViewModel @Inject constructor(
                 toCurrency = null,
                 error = result.errorType
             )
+            else -> {
+                _viewState.value.copy(
+                    isLoading = false,
+                    fromCurrency = null,
+                    toCurrency = null,
+                    error = ErrorType.UnknownError)
+            }
         }
 
     }
@@ -83,7 +101,8 @@ class CurrencyConversionViewModel @Inject constructor(
     fun convertCurrency(amount: Double, toCurrency: String) {
         val rate = _viewState.value.conversionRates?.get(toCurrency)
         if (rate != null) {
-            val result = BigDecimal(amount * rate).setScale(4, RoundingMode.HALF_UP).stripTrailingZeros()
+            val result =
+                BigDecimal(amount * rate).setScale(4, RoundingMode.HALF_UP).stripTrailingZeros()
             _viewState.value =
                 _viewState.value.copy(conversionResult = result.toPlainString(), error = null)
         } else {
@@ -97,24 +116,12 @@ class CurrencyConversionViewModel @Inject constructor(
         val currentState = _viewState.value
         val toCurrency = currentState.toCurrency
         val fromCurrency = currentState.fromCurrency
-        Log.d(
-            "Sarmad",
-            "After swapCurrencies = currentState.fromCurrency = $fromCurrency"
-        )
-        Log.d("Sarmad", "After swapCurrencies = currentState.toCurrency = $toCurrency")
+
 
         if (toCurrency != null && fromCurrency != null) {
 
             setFromCurrency(toCurrency)
             setToCurrency(fromCurrency)
-            Log.d(
-                "Sarmad",
-                "After swapCurrencies = currentState.fromCurrency = ${currentState.fromCurrency}"
-            )
-            Log.d(
-                "Sarmad",
-                "After swapCurrencies = currentState.toCurrency = ${currentState.toCurrency}"
-            )
 
         } else {
             _viewState.value =
