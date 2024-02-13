@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sharpedge.currencyconverter.ui.screen.CurrencyConversionScreen
+import com.sharpedge.currencyconverter.ui.screen.HistoricalDataScreen
 import com.sharpedge.currencyconverter.ui.theme.CurrencyConverterTheme
 import com.sharpedge.currencyconverter.ui.utils.ROUTE_HISTORY
 import com.sharpedge.currencyconverter.ui.utils.ROUTE_HOME
@@ -40,7 +41,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CurrencyConverterTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
             composable(ROUTE_HOME) { CurrencyConversionScreen {
                 navController.navigate(ROUTE_HISTORY)
             } }
-            // History screen here
+            composable(ROUTE_HISTORY) { HistoricalDataScreen() }
         }
     }
 
@@ -112,14 +112,6 @@ class MainActivity : ComponentActivity() {
     private fun NavController.currentRoute(): String? {
         val navBackStackEntry by currentBackStackEntryAsState()
         return navBackStackEntry?.destination?.route
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        CurrencyConverterTheme {
-            //Greeting("Android")
-        }
     }
 
 }

@@ -18,6 +18,8 @@ import com.sharpedge.currencyconverter.usecase.api.IGetCurrencySymbolsUseCase
 import com.sharpedge.currencyconverter.usecase.database.ISaveRecordUseCase
 import java.util.Date
 import com.sharpedge.currencyconverter.utils.Result
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 @HiltViewModel
@@ -81,9 +83,9 @@ class CurrencyConversionViewModel @Inject constructor(
     fun convertCurrency(amount: Double, toCurrency: String) {
         val rate = _viewState.value.conversionRates?.get(toCurrency)
         if (rate != null) {
-            val result = amount * rate
+            val result = BigDecimal(amount * rate).setScale(4, RoundingMode.HALF_UP).stripTrailingZeros()
             _viewState.value =
-                _viewState.value.copy(conversionResult = result.toString(), error = null)
+                _viewState.value.copy(conversionResult = result.toPlainString(), error = null)
         } else {
             _viewState.value =
                 _viewState.value.copy(error = ErrorType.Custom("Conversion rate not available."))
