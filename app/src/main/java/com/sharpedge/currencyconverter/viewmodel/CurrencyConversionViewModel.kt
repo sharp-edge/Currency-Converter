@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sharpedge.currencyconverter.data.database.CurrencyHistory
 import com.sharpedge.currencyconverter.ui.state.CurrencyViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,15 +15,16 @@ import javax.inject.Inject
 import com.sharpedge.currencyconverter.ui.state.ErrorType
 import com.sharpedge.currencyconverter.usecase.api.IGetConversionRatesUseCase
 import com.sharpedge.currencyconverter.usecase.api.IGetCurrencySymbolsUseCase
-import com.sharpedge.currencyconverter.utils.*
+import com.sharpedge.currencyconverter.usecase.database.ISaveRecordUseCase
 import java.util.Date
+import com.sharpedge.currencyconverter.utils.Result
 
 
 @HiltViewModel
 class CurrencyConversionViewModel @Inject constructor(
     private val getCurrencySymbolsUseCase: IGetCurrencySymbolsUseCase,
     private val getConversionRatesUseCase: IGetConversionRatesUseCase,
-    //TODO Usecase for saving records
+    private val iSaveRecordUseCase: ISaveRecordUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(CurrencyViewState())
@@ -154,7 +156,27 @@ class CurrencyConversionViewModel @Inject constructor(
 
 
     private fun saveRecord() = viewModelScope.launch {
-        // TODO have to write the code for saving record to local db in this function
+
+        val fromCurrency = _viewState.value.fromCurrency
+        val toCurrency = _viewState.value.toCurrency
+        if (fromCurrency != null && toCurrency != null) {
+            val record = CurrencyHistory(
+                fromCurrency = fromCurrency,
+                toCurrency = toCurrency,
+                timestamp = Date().time
+            )
+            when (val result = iSaveRecordUseCase.execute(record)) {
+                is Result.Success -> {
+                    // Do nothing for the success case since we want to silently perform DB insert
+                }
+
+                is Result.Failure -> {
+                    _viewState.value = _viewState.value.copy(error = result.errorType)
+                }
+
+            }
+        }
+
     }
 
 }

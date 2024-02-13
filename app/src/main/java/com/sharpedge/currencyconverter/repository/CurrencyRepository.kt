@@ -2,6 +2,8 @@ package com.sharpedge.currencyconverter.repository
 
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.sharpedge.currencyconverter.data.database.CurrencyHistory
+import com.sharpedge.currencyconverter.data.database.CurrencyHistoryDao
 import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
@@ -11,11 +13,12 @@ import com.sharpedge.currencyconverter.network.api.CurrencyService
 import com.sharpedge.currencyconverter.network.api.error.ApiException
 import com.sharpedge.currencyconverter.network.api.error.ErrorDetail
 import com.sharpedge.currencyconverter.ui.state.ErrorType
+import com.sharpedge.currencyconverter.utils.Result
 
 class CurrencyRepository @Inject constructor(
     private val currencyService: CurrencyService,
     private val gson: Gson,
-    // TODO will need to inject more dependencies
+    private val currencyHistoryDao: CurrencyHistoryDao
 
 ) : ICurrencyRepository {
 
@@ -59,7 +62,24 @@ class CurrencyRepository @Inject constructor(
     }
 
 
-    // TODO Need to add more repo functions for DB related operations
+
+    override suspend fun saveConversionRecord(record: CurrencyHistory): Result<Unit> {
+        return try {
+            currencyHistoryDao.insertRecord(record)
+            Result.Success(Unit)
+        } catch (ex: Exception) {
+            Result.Failure(ErrorType.DatabaseError("Failed to save conversion record: ${ex.message}"))
+        }
+    }
+
+    override suspend fun getHistoricalData(since: Long): Result<List<CurrencyHistory>> {
+        return try {
+            val data = currencyHistoryDao.getHistoricalData(since)
+            Result.Success(data)
+        } catch (ex: Exception) {
+            Result.Failure(ErrorType.DatabaseError("Failed to fetch historical data: ${ex.message}"))
+        }
+    }
 
 
 }

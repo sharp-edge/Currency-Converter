@@ -1,6 +1,7 @@
 package com.sharpedge.currencyconverter.di
 
 import com.google.gson.Gson
+import com.sharpedge.currencyconverter.data.database.CurrencyHistoryDao
 import com.sharpedge.currencyconverter.network.RequestInterceptor
 import com.sharpedge.currencyconverter.network.api.CurrencyService
 import com.sharpedge.currencyconverter.repository.CurrencyRepository
@@ -53,8 +54,8 @@ object NetworkModule {
 
 
     @Singleton
-    @Provides // TODO add Dao for saving record
-    fun provideCurrencyRepository(repo: CurrencyService) : ICurrencyRepository {
-        return CurrencyRepository(repo, provideGson())
+    @Provides
+    fun provideCurrencyRepository(repo: CurrencyService, currencyHistoryDao: CurrencyHistoryDao) : ICurrencyRepository {
+        return CurrencyRepository(repo, provideGson(), currencyHistoryDao)
     }
 }
