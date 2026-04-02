@@ -5,3 +5,4 @@ data class CurrencyRecordUIModel(
     val toCurrency: String,
     val date: String
 )
+// Updated: 2026-04-02
