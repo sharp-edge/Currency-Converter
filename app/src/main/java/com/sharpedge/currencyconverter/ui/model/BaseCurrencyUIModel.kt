@@ -6,3 +6,4 @@ data class BaseCurrencyUIModel(
     val rates: LinkedHashMap<String, Double>,
 
 )
+// Last reviewed: 2026-04-24
