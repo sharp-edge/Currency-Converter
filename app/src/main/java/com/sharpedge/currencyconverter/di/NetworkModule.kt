@@ -59,3 +59,4 @@ object NetworkModule {
         return CurrencyRepository(repo, provideGson(), currencyHistoryDao)
     }
 }
+// Verified: 2026-04-28
