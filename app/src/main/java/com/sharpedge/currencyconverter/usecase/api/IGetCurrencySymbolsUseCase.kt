@@ -7,3 +7,4 @@ interface IGetCurrencySymbolsUseCase {
 
     suspend fun fetchCurrencySymbols(): Result<List<CurrencySymbolUIModel>>
 }
+// Updated: 2026-05-06
