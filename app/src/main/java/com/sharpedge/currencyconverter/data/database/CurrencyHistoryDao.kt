@@ -14,3 +14,4 @@ interface CurrencyHistoryDao {
     @Query("SELECT * FROM currency_records WHERE timestamp >= :since ORDER BY timestamp DESC")
     suspend fun getHistoricalData(since: Long): List<CurrencyHistory>
 }
+// Verified: 2026-05-07
