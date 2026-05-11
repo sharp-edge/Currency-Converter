@@ -7,3 +7,4 @@ sealed class Result<out T> {
     data class Success<out T>(val data: T) : Result<T>()
     data class Failure(val errorType: ErrorType) : Result<Nothing>()
 }
+// Verified: 2026-05-11
