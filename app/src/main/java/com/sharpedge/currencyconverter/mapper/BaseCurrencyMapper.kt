@@ -11,3 +11,4 @@ fun BaseCurrencyApiResponseModel.toUIModel(): BaseCurrencyUIModel {
 
     )
 }
+// Updated: 2026-05-21
