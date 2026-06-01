@@ -10,3 +10,4 @@ data class CurrencyViewState(
     val conversionAmount: Int = 1,
     val conversionResult: String? = null
 )
+// Last reviewed: 2026-06-01
