@@ -7,3 +7,4 @@ interface ISaveRecordUseCase {
     suspend fun execute(record: CurrencyHistory): Result<Unit>
 
 }
+// Verified: 2026-06-05
