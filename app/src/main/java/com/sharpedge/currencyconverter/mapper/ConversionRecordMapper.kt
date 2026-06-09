@@ -17,3 +17,4 @@ fun CurrencyHistory.toUIModel(): CurrencyRecordUIModel {
         date = formatDate(this.timestamp)
     )
 }
+// Updated: 2026-06-09
